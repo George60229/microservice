@@ -12,11 +12,9 @@ import lombok.ToString;
 public class Trainer extends User {
     private String specialization;
 
-
-
-
     @Override
-    public String getClassName() {
-        return "trainer";
+    public Integer getId() {
+        return super.getUserId();
     }
+
 }

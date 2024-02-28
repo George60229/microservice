@@ -15,10 +15,8 @@ public class Trainee extends User {
     private String dateOfBirth;
     private String address;
 
-
     @Override
-    public String getClassName() {
-        return "trainee";
+    public Integer getId() {
+        return super.getUserId();
     }
-
 }

@@ -13,29 +13,27 @@ public class TraineeService {
 
     @Autowired
     public TraineeService(TraineeDao trainerDAO) {
-
         this.traineeDAO = trainerDAO;
     }
 
-    public void createTrainee(Trainee trainee) {
+    public Trainee createTrainee(Trainee trainee) {
         log.info("Create trainee:" + trainee.toString());
-        traineeDAO.addTrainee(trainee);
+        return traineeDAO.addTrainee(trainee);
     }
 
-    public void editTrainee(Trainee trainee, String key) {
+    public Trainee editTrainee(Trainee trainee) {
         log.info("Update trainee:" + trainee.toString());
-        traineeDAO.updateTrainee(trainee, key);
+        return traineeDAO.updateTrainee(trainee);
     }
 
-    public void deleteTrainee(int traineeId) {
+    public boolean deleteTrainee(int traineeId) {
         log.info("Delete trainee with id:" + traineeId);
-        traineeDAO.deleteTrainee(String.valueOf(traineeId));
+        return traineeDAO.deleteTrainee(traineeId);
     }
 
     public Trainee selectTrainee(int traineeId) {
         log.info("Select trainee with id:" + traineeId);
         return traineeDAO.getTrainee(traineeId);
-
     }
 
 }

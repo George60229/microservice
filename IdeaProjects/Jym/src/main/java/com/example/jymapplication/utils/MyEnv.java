@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MyEnv implements EnvironmentAware {
-
     private Environment environment;
-
 
     @Autowired
     @Override
@@ -19,6 +17,5 @@ public class MyEnv implements EnvironmentAware {
 
     public String getValue(String valuePath) {
         return environment.getProperty(valuePath);
-
     }
 }

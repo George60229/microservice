@@ -7,17 +7,21 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class TrainingDao {
+
+    GenericDao genericDao;
+
     @Autowired
-    Storage storage;
+    public void setGenericDao(GenericDao genericDao) {
+        this.genericDao = genericDao;
+    }
 
     public Training getTraining(Integer id) {
-        return (Training) storage.getEntity(id);
+        return (Training) genericDao.getEntity(id, Training.class);
     }
 
-    public void addTraining(Training training) {
-        storage.addEntity(training);
+    public Training addTraining(Training training) {
+        return (Training) genericDao.addEntity(training);
     }
-
 
 
 }

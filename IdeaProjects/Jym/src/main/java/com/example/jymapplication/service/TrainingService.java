@@ -16,11 +16,9 @@ public class TrainingService {
         this.trainingDao = trainingDAO;
     }
 
-    public void createTraining(Training training) {
-
+    public Training createTraining(Training training) {
         log.info("Create training: " + training.toString());
-
-        trainingDao.addTraining(training);
+        return trainingDao.addTraining(training);
     }
 
     public Training selectTraining(int trainingId) {

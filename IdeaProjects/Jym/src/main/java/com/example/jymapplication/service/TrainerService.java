@@ -8,26 +8,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class TrainerService{
+public class TrainerService {
 
     TrainerDao trainerDao;
 
     @Autowired
     public TrainerService(TrainerDao trainerDAO) {
-
-
         this.trainerDao = trainerDAO;
     }
 
-
-    public void createTrainer(Trainer trainer) {
+    public Trainer createTrainer(Trainer trainer) {
         log.info("Create trainer:" + trainer.toString());
-        trainerDao.addTrainer(trainer);
+        return trainerDao.addTrainer(trainer);
     }
 
-    public void updateTrainer(Trainer trainer,String key) {
+    public Trainer updateTrainer(Trainer trainer) {
         log.info("Update trainer:" + trainer.toString());
-        trainerDao.updateTrainer(trainer,key);
+        return trainerDao.updateTrainer(trainer);
+
     }
 
     public Trainer selectTrainer(int trainerId) {
