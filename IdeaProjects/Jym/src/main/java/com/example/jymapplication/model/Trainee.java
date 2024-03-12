@@ -5,18 +5,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 public class Trainee extends User {
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
 
-    @Override
-    public Integer getId() {
-        return super.getUserId();
+    public Trainee(String firstName, String lastName, String username, String password, boolean isActive, LocalDate dateOfBirth, String address) {
+        super(firstName, lastName, username, password, isActive);
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
     }
 }

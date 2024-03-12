@@ -1,17 +1,25 @@
 package com.example.jymapplication.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class User implements MyEntity {
+@NoArgsConstructor
+public abstract class User extends AbstractEntity {
+
     private String firstName;
     private String lastName;
     private String username;
     private String password;
-    private boolean isActive;
-    private Integer userId;
+    private Boolean isActive;
 
-
+    public User(String firstName, String lastName, String username, String password, boolean isActive) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.isActive = isActive;
+    }
 }

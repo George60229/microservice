@@ -18,11 +18,11 @@ public class TrainingService {
 
     public Training createTraining(Training training) {
         log.info("Create training: " + training.toString());
-        return trainingDao.addTraining(training);
+        return trainingDao.addEntity(training);
     }
 
     public Training selectTraining(int trainingId) {
         log.info("Select training with id: " + trainingId);
-        return trainingDao.getTraining(trainingId);
+        return trainingDao.getEntity(trainingId);
     }
 }
