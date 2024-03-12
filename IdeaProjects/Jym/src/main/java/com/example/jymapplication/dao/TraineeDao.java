@@ -1,36 +1,31 @@
 package com.example.jymapplication.dao;
 
 import com.example.jymapplication.model.Trainee;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.jymapplication.storage.Storage;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class TraineeDao {
+public class TraineeDao extends GenericDao<Trainee> {
 
-    GenericDao genericDao;
-
-    @Autowired
-    public void setGenericDao(GenericDao genericDao) {
-        this.genericDao = genericDao;
+    public TraineeDao(Storage storage) {
+        super(storage);
+        entityClass = Trainee.class;
     }
 
-    public Trainee getTrainee(Integer id) {
-        Object res = genericDao.getEntity(id, Trainee.class);
-        if (res != null) {
-            return (Trainee) res;
-        }
-        return null;
+    public Trainee get(Integer id) {
+
+        return getEntity(id);
     }
 
-    public Trainee addTrainee(Trainee trainee) {
-        return (Trainee) genericDao.addEntity(trainee);
+    public Trainee add(Trainee trainee) {
+        return (Trainee) addEntity(trainee);
     }
 
-    public Trainee updateTrainee(Trainee trainee) {
-        return (Trainee) genericDao.updateEntity(trainee);
+    public Trainee update(Trainee trainee) {
+        return (Trainee) updateEntity(trainee);
     }
 
-    public boolean deleteTrainee(int userId) {
-        return genericDao.removeEntity(userId, Trainee.class);
+    public boolean delete(int userId) {
+        return removeEntity(userId);
     }
 }

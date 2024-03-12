@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class TrainerService {
-
     TrainerDao trainerDao;
 
     @Autowired
@@ -19,17 +18,17 @@ public class TrainerService {
 
     public Trainer createTrainer(Trainer trainer) {
         log.info("Create trainer:" + trainer.toString());
-        return trainerDao.addTrainer(trainer);
+        return trainerDao.add(trainer);
     }
 
     public Trainer updateTrainer(Trainer trainer) {
         log.info("Update trainer:" + trainer.toString());
-        return trainerDao.updateTrainer(trainer);
+        return trainerDao.update(trainer);
 
     }
 
     public Trainer selectTrainer(int trainerId) {
         log.info("Select trainer with id:" + trainerId);
-        return trainerDao.getTrainer(trainerId);
+        return trainerDao.get(trainerId);
     }
 }

@@ -23,6 +23,6 @@ public class TrainingService {
 
     public Training selectTraining(int trainingId) {
         log.info("Select training with id: " + trainingId);
-        return trainingDao.getTraining(trainingId);
+        return trainingDao.get(trainingId);
     }
 }

@@ -12,9 +12,8 @@ import java.util.Random;
 
 @Service
 public class UserService {
-
-    public String calculateUsername(Storage storage, User user) {
-        String username = user.getFirstName() + "." + user.getLastName();
+    public String calculateUsername(Storage storage, String firstName, String lastName) {
+        String username = firstName + "." + lastName;
         Map<String, MyEntity> userData = storage.data;
         int counter = 0;
         for (Map.Entry<String, MyEntity> entry : userData.entrySet()) {
@@ -27,6 +26,7 @@ public class UserService {
         }
         return counter == 0 ? username : username + counter;
     }
+
     public String generatePassword() {
         int minCharCode = 'a';
         int maxCharCode = 'z';

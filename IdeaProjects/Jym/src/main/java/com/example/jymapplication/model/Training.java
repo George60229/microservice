@@ -5,19 +5,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class Training implements MyEntity {
-    private Integer trainingId;
+public class Training extends AbstractEntity implements MyEntity {
+    public Training(String trainingName, TrainingType trainingType, LocalDate trainingDate, int trainingDuration) {
+
+        this.trainingName = trainingName;
+        this.trainingType = trainingType;
+        this.trainingDate = trainingDate;
+        this.trainingDuration = trainingDuration;
+    }
+
     private String trainingName;
     private TrainingType trainingType;
-    private String trainingDate;
+    private LocalDate trainingDate;
     private int trainingDuration;
-
-    @Override
-    public Integer getId() {
-        return trainingId;
-    }
 }

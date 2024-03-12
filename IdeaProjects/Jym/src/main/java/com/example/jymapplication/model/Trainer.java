@@ -10,11 +10,11 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 public class Trainer extends User {
-    private String specialization;
-
-    @Override
-    public Integer getId() {
-        return super.getUserId();
+    public Trainer(String firstName, String lastName, String username, String password, boolean isActive, String specialization) {
+        super(firstName, lastName, username, password, isActive);
+        this.specialization = specialization;
     }
+
+    private String specialization;
 
 }

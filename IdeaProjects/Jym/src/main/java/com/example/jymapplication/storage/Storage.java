@@ -1,11 +1,13 @@
 package com.example.jymapplication.storage;
 
-import com.example.jymapplication.model.*;
-import com.example.jymapplication.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.jymapplication.model.MyEntity;
+import com.example.jymapplication.model.Trainee;
+import com.example.jymapplication.model.Trainer;
+import com.example.jymapplication.model.Training;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class Storage {
@@ -15,7 +17,7 @@ public class Storage {
             Map.of(Trainee.class, "Trainee", Training.class, "Training", Trainer.class, "Trainer");
 
     public MyEntity addEntity(MyEntity myEntity) {
-        String value = classStringMap.get(myEntity.getClass()) + myEntity.getId();
+        String value = classStringMap.get(myEntity.getClass()) + ":" + myEntity.getId();
         data.put(value, myEntity);
         return myEntity;
     }
@@ -38,9 +40,7 @@ public class Storage {
 
     public MyEntity getEntity(int id, Class<? extends MyEntity> myEntityClass) {
         String key = myEntityClass.getSimpleName() + ":" + id;
-        if (data.get(key) != null) {
-            return data.get(key);
-        }
-        return null;
+        return data.get(key) != null ? data.get(key) : null;
     }
+
 }

@@ -18,22 +18,22 @@ public class TraineeService {
 
     public Trainee createTrainee(Trainee trainee) {
         log.info("Create trainee:" + trainee.toString());
-        return traineeDAO.addTrainee(trainee);
+        return traineeDAO.add(trainee);
     }
 
     public Trainee editTrainee(Trainee trainee) {
         log.info("Update trainee:" + trainee.toString());
-        return traineeDAO.updateTrainee(trainee);
+        return traineeDAO.update(trainee);
     }
 
     public boolean deleteTrainee(int traineeId) {
         log.info("Delete trainee with id:" + traineeId);
-        return traineeDAO.deleteTrainee(traineeId);
+        return traineeDAO.delete(traineeId);
     }
 
     public Trainee selectTrainee(int traineeId) {
         log.info("Select trainee with id:" + traineeId);
-        return traineeDAO.getTrainee(traineeId);
+        return traineeDAO.get(traineeId);
     }
 
 }

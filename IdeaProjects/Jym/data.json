@@ -1,57 +1,48 @@
 [
   {
-    "dateOfBirth": "1990-01-01",
-    "address": "123 Main St",
-    "userId": 1,
-    "password": "ghthyujghgh",
-    "firstName": "John",
-    "lastName": "Doe",
-    "className": "trainee"
-  },
-  {
     "dateOfBirth": "1985-05-15",
     "address": "456 Elm St",
-    "userId": 2,
     "password": "ghthyujghgh",
     "firstName": "Alice",
     "lastName": "Smith",
-    "className": "trainee"
+    "entityType": "trainee",
+    "isActive": "true"
   },
   {
     "dateOfBirth": "1978-09-30",
     "address": "789 Oak St",
-    "userId": 3,
     "password": "ghthyujghgh",
     "firstName": "Michael",
     "lastName": "Johnson",
-    "className": "trainee"
+    "entityType": "trainee",
+    "isActive": "true"
   },
   {
     "dateOfBirth": "1995-11-20",
     "address": "321 Pine St",
-    "userId": 4,
     "password": "ghthyujghgh",
     "firstName": "Emily",
     "lastName": "Brown",
-    "className": "trainee"
+    "entityType": "trainee",
+    "isActive": "true"
   },
   {
     "dateOfBirth": "1990-01-01",
     "address": "123 Main St",
-    "userId": 1,
     "password": "ghthyujghgh",
     "firstName": "John",
     "lastName": "Doe",
     "specialization": "first",
-    "className": "trainer"
+    "entityType": "trainer",
+    "isActive": "true"
   },
   {
-    "userId": 1,
     "password": "ghthyujghgh",
     "firstName": "John",
     "lastName": "Doe",
     "specialization": "first",
-    "className": "trainer"
+    "entityType": "trainer",
+    "isActive": "true"
   }
 ]
 
