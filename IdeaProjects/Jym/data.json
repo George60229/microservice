@@ -1,0 +1,48 @@
+[
+  {
+    "dateOfBirth": "1985-05-15",
+    "address": "456 Elm St",
+    "password": "ghthyujghgh",
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "entityType": "trainee",
+    "isActive": "true"
+  },
+  {
+    "dateOfBirth": "1978-09-30",
+    "address": "789 Oak St",
+    "password": "ghthyujghgh",
+    "firstName": "Michael",
+    "lastName": "Johnson",
+    "entityType": "trainee",
+    "isActive": "true"
+  },
+  {
+    "dateOfBirth": "1995-11-20",
+    "address": "321 Pine St",
+    "password": "ghthyujghgh",
+    "firstName": "Emily",
+    "lastName": "Brown",
+    "entityType": "trainee",
+    "isActive": "true"
+  },
+  {
+    "dateOfBirth": "1990-01-01",
+    "address": "123 Main St",
+    "password": "ghthyujghgh",
+    "firstName": "John",
+    "lastName": "Doe",
+    "specialization": "first",
+    "entityType": "trainer",
+    "isActive": "true"
+  },
+  {
+    "password": "ghthyujghgh",
+    "firstName": "John",
+    "lastName": "Doe",
+    "specialization": "first",
+    "entityType": "trainer",
+    "isActive": "true"
+  }
+]
+
