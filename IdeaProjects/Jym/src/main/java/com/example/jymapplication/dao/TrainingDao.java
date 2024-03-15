@@ -1,25 +1,26 @@
 package com.example.jymapplication.dao;
 
-import com.example.jymapplication.model.MyEntity;
 import com.example.jymapplication.model.Training;
-import com.example.jymapplication.storage.Storage;
+import com.example.jymapplication.repository.TrainingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public class TrainingDao extends GenericDao<Training> {
+public class TrainingDao {
 
-    public TrainingDao(Storage storage) {
-        super(storage);
-        entityClass = Training.class;
+    TrainingRepository trainingRepository;
+
+    public TrainingDao(TrainingRepository trainingRepository) {
+        this.trainingRepository = trainingRepository;
     }
 
-    @Override
-    public boolean removeEntity(int id) {
-        throw new UnsupportedOperationException("You can't delete training");
+    public Training add(Training training) {
+        return trainingRepository.save(training);
     }
 
-    @Override
-    public Training updateEntity(MyEntity myEntity) {
-        throw new UnsupportedOperationException("You can't update training");
+    public Training get(int id) {
+        Optional<Training> optionalTrainee = trainingRepository.findById(id);
+        return optionalTrainee.orElse(null);
     }
 }

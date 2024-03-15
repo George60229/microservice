@@ -1,30 +1,50 @@
 package com.example.jymapplication.service;
 
-import com.example.jymapplication.model.MyEntity;
-import com.example.jymapplication.model.User;
-import com.example.jymapplication.storage.Storage;
-import io.micrometer.common.util.StringUtils;
+import com.example.jymapplication.model.MyUser;
+import com.example.jymapplication.model.Trainee;
+import com.example.jymapplication.model.Trainer;
+import com.example.jymapplication.repository.TraineeRepository;
+import com.example.jymapplication.repository.TrainerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Random;
 
 
 @Service
 public class UserService {
-    public String calculateUsername(Storage storage, String firstName, String lastName) {
-        String username = firstName + "." + lastName;
-        Map<String, MyEntity> userData = storage.data;
+
+    @Autowired
+    TrainerRepository trainerRepository;
+    @Autowired
+    TraineeRepository traineeRepository;
+
+    public String generateUsername(MyUser myEntity) {
         int counter = 0;
-        for (Map.Entry<String, MyEntity> entry : userData.entrySet()) {
-            if (entry.getValue() instanceof User) {
-                String result = ((User) entry.getValue()).getUsername().replaceAll("\\d", "");
-                if (StringUtils.isNotEmpty(result)) {
+        if (myEntity instanceof Trainer) {
+            List<Trainer> users = trainerRepository.findAll();
+            for (Trainer trainer : users) {
+                if (trainer.getFirstName().equals((myEntity).getFirstName())
+                        && trainer.getLastName().equals((myEntity).getLastName())) {
                     counter++;
                 }
             }
         }
-        return counter == 0 ? username : username + counter;
+        if (myEntity instanceof Trainee) {
+            List<Trainee> users = traineeRepository.findAll();
+            for (Trainee trainee : users) {
+                if (trainee.getFirstName().equals((myEntity).getFirstName())
+                        && trainee.getLastName().equals((myEntity).getLastName())) {
+                    counter++;
+                }
+            }
+        }
+        if (counter == 0) {
+            return myEntity.getFirstName() + "_" + (myEntity).getLastName();
+        } else {
+            return myEntity.getFirstName() + "_" + (myEntity).getLastName() + counter;
+        }
     }
 
     public String generatePassword() {

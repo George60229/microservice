@@ -1,33 +1,57 @@
 package com.example.jymapplication.dao;
 
-import com.example.jymapplication.model.MyEntity;
-import com.example.jymapplication.storage.Storage;
+import com.example.jymapplication.dto.AuthorizeDto;
+import com.example.jymapplication.model.MyUser;
+import com.example.jymapplication.repository.MyUserRepository;
+import com.example.jymapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public class GenericDao<T extends MyEntity> {
-    Storage storage;
-    Class<T> entityClass;
+import java.util.Optional;
+
+public class GenericDao<T extends MyUser> {
 
     @Autowired
-    public GenericDao(Storage storage) {
-        this.storage = storage;
+    MyUserRepository repository;
+
+    @Autowired
+    private UserService userService;
+
+    public T getByUsername(String username) {
+        return (T) repository.findByUsername(username);
     }
 
-    public T getEntity(Integer id) {
-        return (T) storage.getEntity(id, entityClass);
+    public boolean checkPassword(AuthorizeDto authorizeDto) {
+        MyUser myUser = getByUsername(authorizeDto.username);
+        return myUser.getPassword().equals(authorizeDto.password);
     }
 
-    public T addEntity(MyEntity entity) {
-        return (T) storage.addEntity(entity);
+    public T changePassword(String username, String newPassword) {
+        MyUser user = getByUsername(username);
+        user.setPassword(newPassword);
+        return update((T) user);
     }
 
-    public T updateEntity(MyEntity entity) {
-        return (T) storage.updateEntity(entity);
+    public T update(T trainee) {
+        return repository.save(trainee);
     }
 
-    public boolean removeEntity(int entityId) {
-        return storage.removeEntity(entityId, entityClass);
+    public void changeActivity(String username) {
+        MyUser user = getByUsername(username);
+        user.setIsActive(!user.getIsActive());
+        update((T) user);
     }
+
+    public T add(T trainee) {
+        trainee.setPassword(userService.generatePassword());
+        trainee.setUsername(userService.generateUsername(trainee));
+        return repository.save(trainee);
+    }
+
+    public T get(int id) {
+        Optional<T> optionalTrainer = (Optional<T>) repository.findById(id);
+        return optionalTrainer.orElse(null);
+
+    }
+
+
 }
