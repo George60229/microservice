@@ -16,5 +16,7 @@ public class TrainingType {
     private String name;
 
 
-
+    @ManyToOne
+    @JoinColumn(name = "training_id")
+    private Training training;
 }

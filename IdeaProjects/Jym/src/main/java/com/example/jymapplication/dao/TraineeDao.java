@@ -14,17 +14,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public class TraineeDao extends GenericDao<Trainee> {
+public class TraineeDao {
     TraineeRepository traineeRepository;
-    private final TrainerRepository trainerRepository;
 
-    public TraineeDao(TraineeRepository traineeRepository,
-                      TrainerRepository trainerRepository) {
+
+    @Autowired
+    private UserService userService;
+
+    public TraineeDao(TraineeRepository traineeRepository) {
         this.traineeRepository = traineeRepository;
-        this.trainerRepository = trainerRepository;
+
     }
 
     public void delete(int id) {
@@ -35,15 +38,7 @@ public class TraineeDao extends GenericDao<Trainee> {
         traineeRepository.deleteByUsername(username);
     }
 
-    public Set<Trainer> getFreeTrainers(String username) {
-        Trainee trainee = getByUsername(username);
-        Set<Training> trainings = trainee.getTrainings();
-        Set<Trainer> trainers = (Set<Trainer>) trainerRepository.findAll();
-        for (Training trainer : trainings) {
-            trainers.remove(trainer);
-        }
-        return trainers;
-    }
+
 
     public Set<Training> getTrainingByCriteria(String username, TraineeCriteria criteria, Object value) {
         Trainee trainee = getByUsername(username);
@@ -73,6 +68,48 @@ public class TraineeDao extends GenericDao<Trainee> {
         }
         return resultTrainings;
     }
+
+    public Trainee getByUsername(String username) {
+        return traineeRepository.findByUsername(username);
+    }
+
+    public boolean checkPassword(AuthorizeDto authorizeDto) {
+        MyUser myUser = getByUsername(authorizeDto.username);
+        return myUser.getPassword().equals(authorizeDto.password);
+    }
+
+    public Trainee changePassword(String username, String newPassword) {
+        Trainee user = getByUsername(username);
+        user.setPassword(newPassword);
+        return update(user);
+    }
+
+    public Trainee update(Trainee trainee) {
+        return traineeRepository.save(trainee);
+    }
+
+    public void changeActivity(String username) {
+        Trainee user = getByUsername(username);
+        user.setIsActive(!user.getIsActive());
+        update(user);
+    }
+
+    public Trainee add(Trainee trainee) {
+        trainee.setPassword(userService.generatePassword());
+        trainee.setUsername(userService.generateUsername(trainee,getAll()));
+        return traineeRepository.save(trainee);
+    }
+
+    public Trainee get(int id) {
+        Optional<Trainee> optionalTrainee = traineeRepository.findById(id);
+        return optionalTrainee.orElse(null);
+
+    }
+
+    public Set<Trainee> getAll(){
+        return (Set<Trainee>) traineeRepository.findAll();
+    }
+
 
 
 }

@@ -1,11 +1,11 @@
 package com.example.jymapplication.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -15,7 +15,6 @@ import java.util.Set;
 @Entity
 public class Trainee extends MyUser {
 
-
     private Date dateOfBirth;
     private String address;
 
@@ -24,7 +23,6 @@ public class Trainee extends MyUser {
         this.dateOfBirth = dateOfBirth;
         this.address = address;
     }
-
 
     @ManyToMany(mappedBy = "trainees")
     private Set<Training> trainings;

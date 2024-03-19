@@ -1,10 +1,12 @@
 package com.example.jymapplication.service;
 
 import com.example.jymapplication.dao.TraineeDao;
+import com.example.jymapplication.dao.TrainerDao;
 import com.example.jymapplication.dto.AuthorizeDto;
 import com.example.jymapplication.dto.TraineeDto;
 import com.example.jymapplication.enums.TraineeCriteria;
 import com.example.jymapplication.enums.TrainerCriteria;
+import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
@@ -19,18 +21,22 @@ import java.util.Set;
 @Slf4j
 public class TraineeService {
     TraineeDao traineeDao;
+    TrainerDao trainerDao;
+
 
     @Autowired
     Converter converter;
 
 
     @Autowired
-    public TraineeService(TraineeDao trainerDAO) {
-        this.traineeDao = trainerDAO;
+    public TraineeService(TraineeDao traineeDao, TrainerDao trainerDao) {
+        this.traineeDao = traineeDao;
+        this.trainerDao = trainerDao;
     }
 
     public boolean checkCredential(AuthorizeDto authorizeDto) {
-        return traineeDao.checkPassword(authorizeDto);
+        MyUser myUser = getByUsername(authorizeDto.username);
+        return myUser.getPassword().equals(authorizeDto.password);
     }
 
     public Trainee createTrainee(TraineeDto traineeDto) {
@@ -39,12 +45,9 @@ public class TraineeService {
     }
 
     public Trainee editTrainee(TraineeDto traineeDto, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Update trainee:" + traineeDto.toString());
-            return traineeDao.update(converter.traineeDtoToModel(traineeDto));
-        }
-        return null;
+        return checkCredential(authorizeDto) ? traineeDao.update(converter.traineeDtoToModel(traineeDto)) : null;
     }
+
 
     public void deleteTrainee(int traineeId, AuthorizeDto authorizeDto) {
         if (checkCredential(authorizeDto)) {
@@ -55,47 +58,55 @@ public class TraineeService {
     }
 
     public Trainee selectTrainee(int traineeId, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Select trainee with id:" + traineeId);
-            return traineeDao.get(traineeId);
-        }
-        return null;
+        return checkCredential(authorizeDto) ? traineeDao.get(traineeId) : null;
     }
 
+
     public Set<Trainer> getFreeTrainers(String username, AuthorizeDto authorizeDto) {
+
         if (checkCredential(authorizeDto)) {
-            return traineeDao.getFreeTrainers(username);
+            Trainee trainee = getByUsername(username);
+            Set<Training> trainings = trainee.getTrainings();
+            Set<Trainer> trainers = trainerDao.findAll();
+            for (Training training : trainings) {
+                trainers.remove(training.getTrainer());
+            }
+            return trainers;
         }
         return null;
     }
 
     public Trainee changePassword(String username, String newPassword, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Change password:" + username);
-            return traineeDao.changePassword(username, newPassword);
-        }
-        return null;
+        return checkCredential(authorizeDto) ? traineeDao.changePassword(username, newPassword) : null;
     }
+
 
     public void changeActivity(String username, AuthorizeDto authorizeDto) {
         if (checkCredential(authorizeDto)) {
             log.info("Change activity status:" + username);
             traineeDao.changeActivity(username);
         }
-
     }
+
 
     public Set<Training> getTrainingByCriteria(String username, TraineeCriteria criteria, Object value, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            return traineeDao.getTrainingByCriteria(username, criteria, value);
-        }
-        return null;
+        return checkCredential(authorizeDto) ? traineeDao.getTrainingByCriteria(username, criteria, value) : null;
     }
+
 
     public void delete(String username, AuthorizeDto authorizeDto) {
         if (checkCredential(authorizeDto)) {
             traineeDao.deleteByUsername(username);
         }
     }
+
+    private Trainee getByUsername(String username) {
+        return traineeDao.getByUsername(username);
+    }
+
+    public Set<Trainee> getAll() {
+        return traineeDao.getAll();
+    }
+
 
 }

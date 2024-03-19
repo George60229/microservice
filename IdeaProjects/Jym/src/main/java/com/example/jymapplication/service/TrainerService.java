@@ -4,7 +4,7 @@ import com.example.jymapplication.dao.TrainerDao;
 import com.example.jymapplication.dto.AuthorizeDto;
 import com.example.jymapplication.dto.TrainerDto;
 import com.example.jymapplication.enums.TrainerCriteria;
-import com.example.jymapplication.model.Trainee;
+import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
 import com.example.jymapplication.utils.Converter;
@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -34,32 +32,17 @@ public class TrainerService {
     }
 
     public Trainer updateTrainer(TrainerDto trainerDto, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Update trainer:" + trainerDto.toString());
-            return trainerDao.update(converter.trainerDtoToModel(trainerDto));
-        }
-        return null;
+        return checkCredential(authorizeDto) ? trainerDao.update(converter.trainerDtoToModel(trainerDto)) : null;
     }
 
     public Trainer selectTrainer(int trainerId, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Select trainer with id:" + trainerId);
-            return trainerDao.get(trainerId);
-        }
-        return null;
-    }
-
-    private boolean checkCredential(AuthorizeDto authorizeDto) {
-        return trainerDao.checkPassword(authorizeDto);
+        return checkCredential(authorizeDto) ? trainerDao.get(trainerId) : null;
     }
 
     public Trainer changePassword(String username, String newPassword, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Change password:" + username);
-            return trainerDao.changePassword(username, newPassword);
-        }
-        return null;
+        return checkCredential(authorizeDto) ? trainerDao.changePassword(username, newPassword) : null;
     }
+
 
     public void changeActivity(String username, AuthorizeDto authorizeDto) {
         if (checkCredential(authorizeDto)) {
@@ -69,9 +52,20 @@ public class TrainerService {
     }
 
     public Set<Training> getTrainingByCriteria(String username, TrainerCriteria criteria, Object value, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            return trainerDao.getTrainingByCriteria(username, criteria, value);
-        }
-        return null;
+        return checkCredential(authorizeDto) ? trainerDao.getTrainingByCriteria(username, criteria, value) : null;
+    }
+
+
+    public boolean checkCredential(AuthorizeDto authorizeDto) {
+        MyUser myUser = getByUsername(authorizeDto.username);
+        return myUser.getPassword().equals(authorizeDto.password);
+    }
+
+    private Trainer getByUsername(String username) {
+        return trainerDao.getByUsername(username);
+    }
+
+    public Set<Trainer> getAll() {
+        return trainerDao.findAll();
     }
 }

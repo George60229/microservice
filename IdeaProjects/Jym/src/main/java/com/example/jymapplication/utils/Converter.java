@@ -9,16 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class Converter {
     public Trainee traineeDtoToModel(TraineeDto dto) {
-        if (dto.getDateOfBirth() == null || dto.getAddress() == null || dto.getFirstName() == null || dto.getLastName() == null) {
-            return null;
-        }
-        return new Trainee(dto.getFirstName(), dto.getLastName(), dto.getDateOfBirth(), dto.getAddress());
+        return (dto.getDateOfBirth() == null || dto.getAddress() == null ||
+                dto.getFirstName() == null || dto.getLastName() == null) ? null :
+                new Trainee(dto.getFirstName(), dto.getLastName(), dto.getDateOfBirth(), dto.getAddress());
     }
 
     public Trainer trainerDtoToModel(TrainerDto dto) {
-        if (dto.getFirstName() == null || dto.getLastName() == null || dto.getSpecialization() == null) {
-            return null;
-        }
-        return new Trainer(dto.getFirstName(), dto.getLastName(), dto.getSpecialization());
+        return (dto.getFirstName() == null || dto.getLastName() == null || dto.getSpecialization() == null) ? null :
+                new Trainer(dto.getFirstName(), dto.getLastName(), dto.getSpecialization());
     }
 }

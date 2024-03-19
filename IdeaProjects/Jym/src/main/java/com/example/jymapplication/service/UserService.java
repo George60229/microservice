@@ -3,39 +3,25 @@ package com.example.jymapplication.service;
 import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
-import com.example.jymapplication.repository.TraineeRepository;
-import com.example.jymapplication.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 
 @Service
 public class UserService {
 
-    @Autowired
-    TrainerRepository trainerRepository;
-    @Autowired
-    TraineeRepository traineeRepository;
+    
 
-    public String generateUsername(MyUser myEntity) {
+    public String generateUsername(MyUser myEntity,Set<? extends MyUser> users) {
         int counter = 0;
         if (myEntity instanceof Trainer) {
-            List<Trainer> users = trainerRepository.findAll();
-            for (Trainer trainer : users) {
-                if (trainer.getFirstName().equals((myEntity).getFirstName())
-                        && trainer.getLastName().equals((myEntity).getLastName())) {
-                    counter++;
-                }
-            }
-        }
-        if (myEntity instanceof Trainee) {
-            List<Trainee> users = traineeRepository.findAll();
-            for (Trainee trainee : users) {
-                if (trainee.getFirstName().equals((myEntity).getFirstName())
-                        && trainee.getLastName().equals((myEntity).getLastName())) {
+
+            for (MyUser user : users) {
+                if (user.getFirstName().equals((myEntity).getFirstName())
+                        && user.getLastName().equals((myEntity).getLastName())) {
                     counter++;
                 }
             }

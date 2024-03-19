@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface TraineeRepository extends JpaRepository<Trainee, Integer> {
+    Trainee findByUsername(String username);
     void deleteByUsername(String username);
 
 }
