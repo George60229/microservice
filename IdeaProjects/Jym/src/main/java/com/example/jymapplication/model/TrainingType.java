@@ -15,8 +15,7 @@ public class TrainingType {
 
     private String name;
 
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "training_id")
     private Training training;
 }

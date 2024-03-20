@@ -11,4 +11,5 @@ public class TraineeDto {
     String lastName;
     Date dateOfBirth;
     String address;
+
 }

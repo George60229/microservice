@@ -1,9 +1,7 @@
-package com.example.jymapplication.service;
+package com.example.jymapplication.utils;
 
 import com.example.jymapplication.model.MyUser;
-import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -11,11 +9,10 @@ import java.util.Set;
 
 
 @Service
-public class UserService {
+public class UserUtils {
 
-    
 
-    public String generateUsername(MyUser myEntity,Set<? extends MyUser> users) {
+    public String generateUsername(MyUser myEntity, Set<? extends MyUser> users) {
         int counter = 0;
         if (myEntity instanceof Trainer) {
 
@@ -26,11 +23,7 @@ public class UserService {
                 }
             }
         }
-        if (counter == 0) {
-            return myEntity.getFirstName() + "_" + (myEntity).getLastName();
-        } else {
-            return myEntity.getFirstName() + "_" + (myEntity).getLastName() + counter;
-        }
+        return myEntity.getFirstName() + "_" + (myEntity).getLastName() + (counter == 0 ? "" : counter);
     }
 
     public String generatePassword() {

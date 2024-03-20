@@ -1,5 +1,6 @@
 package com.example.jymapplication.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class Trainer extends MyUser {
 
     private String specialization;
 
-    @ManyToMany
-    private Set<Training> training;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Training> trainings;
 
 }
