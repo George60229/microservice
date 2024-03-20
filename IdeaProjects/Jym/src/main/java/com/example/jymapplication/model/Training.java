@@ -1,27 +1,42 @@
 package com.example.jymapplication.model;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class Training extends AbstractEntity implements MyEntity {
-    public Training(String trainingName, TrainingType trainingType, LocalDate trainingDate, int trainingDuration) {
-
-        this.trainingName = trainingName;
-        this.trainingType = trainingType;
-        this.trainingDate = trainingDate;
-        this.trainingDuration = trainingDuration;
-    }
+@Entity
+public class Training implements MyEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
     private String trainingName;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "training_type_id")
     private TrainingType trainingType;
-    private LocalDate trainingDate;
+    private Date trainingDate;
     private int trainingDuration;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "trainer_id")
+    private Trainer trainer;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "training_trainee",
+            joinColumns = @JoinColumn(name = "training_id"),
+            inverseJoinColumns = @JoinColumn(name = "trainee_id"))
+    private Set<Trainee> trainees;
+
 }
