@@ -1,4 +1,4 @@
-package com.example.jymapplication;
+package com.example.jymapplication.repository;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

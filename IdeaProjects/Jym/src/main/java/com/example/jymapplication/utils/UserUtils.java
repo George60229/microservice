@@ -4,6 +4,7 @@ import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.model.Trainer;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -12,17 +13,17 @@ import java.util.Set;
 public class UserUtils {
 
 
-    public String generateUsername(MyUser myEntity, Set<? extends MyUser> users) {
+    public String generateUsername(MyUser myEntity, List<? extends MyUser> users) {
         int counter = 0;
-        if (myEntity instanceof Trainer) {
 
-            for (MyUser user : users) {
-                if (user.getFirstName().equals((myEntity).getFirstName())
-                        && user.getLastName().equals((myEntity).getLastName())) {
-                    counter++;
-                }
+
+        for (MyUser user : users) {
+            if (user.getFirstName().equals((myEntity).getFirstName())
+                    && user.getLastName().equals((myEntity).getLastName())) {
+                counter++;
             }
         }
+
         return myEntity.getFirstName() + "_" + (myEntity).getLastName() + (counter == 0 ? "" : counter);
     }
 

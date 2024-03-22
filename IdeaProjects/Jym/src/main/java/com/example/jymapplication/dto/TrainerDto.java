@@ -1,12 +1,17 @@
 package com.example.jymapplication.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.jymapplication.model.TrainingType;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TrainerDto {
+    @NonNull
     String firstName;
+    @NonNull
     String lastName;
-    private String specialization;
+    @NonNull
+    private TrainingType specialization;
 }

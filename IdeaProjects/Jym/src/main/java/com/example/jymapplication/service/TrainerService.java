@@ -9,6 +9,11 @@ import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
 import com.example.jymapplication.repository.TrainerRepository;
+import com.example.jymapplication.request.TrainerRequest;
+import com.example.jymapplication.request.TrainingTrainerRequest;
+import com.example.jymapplication.response.TrainerProfile;
+import com.example.jymapplication.response.TrainerResponse;
+import com.example.jymapplication.response.TrainingResponse;
 import com.example.jymapplication.utils.Converter;
 import com.example.jymapplication.utils.UserUtils;
 import jakarta.transaction.Transactional;
@@ -16,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,67 +39,57 @@ public class TrainerService {
         this.trainerRepository = trainerDAO;
     }
 
-    public Trainer createTrainer(TrainerDto trainerDto) {
+    public TrainerResponse createTrainer(TrainerDto trainerDto) {
         log.info("Create trainer:" + trainerDto.toString());
         Trainer trainer = converter.trainerDtoToModel(trainerDto);
         trainer.setPassword(userUtils.generatePassword());
-        trainer.setUsername(userUtils.generateUsername(trainer, (Set<Trainer>) trainerRepository.findAll()));
-        return trainerRepository.save(trainer);
+        trainer.setUsername(userUtils.generateUsername(trainer,  trainerRepository.findAll()));
+        return converter.trainerModelToResponse(trainerRepository.save(trainer));
 
     }
 
     @Transactional
-    public Trainer updateTrainer(TrainerDto trainerDto, AuthorizeDto authorizeDto, int userId) {
-        if (checkCredential(authorizeDto)) {
-            if (trainerRepository.findById(userId).isPresent()) {
-                Trainer trainer = trainerRepository.findById(userId).get();
-                trainer.setFirstName(trainerDto.getFirstName());
-                trainer.setLastName(trainerDto.getLastName());
-                trainer.setSpecialization(trainerDto.getSpecialization());
-                trainerRepository.save(trainer);
-            }
+    public TrainerProfile updateTrainer(TrainerRequest trainerRequest) {
 
-        }
-        return null;
+        Trainer trainer = trainerRepository.findByUsername(trainerRequest.getUsername());
+
+        trainer.setFirstName(trainerRequest.getFirstName());
+        trainer.setLastName(trainerRequest.getLastName());
+        trainer.setSpecialization(trainerRequest.getSpecialization());
+        trainer.setIsActive(trainerRequest.getIsActive());
+        return converter.getTrainerProfile(trainerRepository.save(trainer), getMyTrainees(trainer));
+
+
     }
 
-    public Trainer selectTrainer(int trainerId, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            trainerRepository.findById(trainerId);
-        }
-        return null;
+    public TrainerProfile selectTrainer(String username) {
+        Trainer trainer = trainerRepository.findByUsername(username);
+        return converter.getTrainerProfile(trainer, getMyTrainees(trainer));
     }
 
-    public Trainer changePassword(String username, String newPassword, AuthorizeDto authorizeDto) {
+    public Trainer getTrainer(String username) {
+        return trainerRepository.findByUsername(username);
 
-        if (checkCredential(authorizeDto)) {
-            Trainer trainer = trainerRepository.findByUsername(username);
-            trainer.setPassword(newPassword);
-            return trainerRepository.save(trainer);
-
-        }
-        return null;
     }
 
 
-    public void changeActivity(String username, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Change activity status:" + username);
-            Trainer trainer = trainerRepository.findByUsername(username);
-            trainer.setIsActive(!trainer.getIsActive());
-            trainerRepository.save(trainer);
-        }
+    public void changeActivity(String username, boolean isActive) {
+
+        log.info("Change activity status:" + username);
+        Trainer trainer = trainerRepository.findByUsername(username);
+        trainer.setIsActive(isActive);
+        trainerRepository.save(trainer);
+
     }
 
-    public Set<Training> getTrainingByCriteria(String username, TrainerCriteria criteria, Object value, AuthorizeDto authorizeDto) {
-        if (checkCredential(authorizeDto)) {
-            log.info("Change activity status:" + username);
-            Trainer trainee = getByUsername(username);
-            CommandExecutor commandExecutor = new CommandExecutor(trainee.getTrainings(), value);
+    public Set<Training> getTrainingByCriteria(String username, TrainerCriteria criteria, Object value) {
 
-            return commandExecutor.executeCommand(criteria.name());
-        }
-        return null;
+        log.info("Change activity status:" + username);
+        Trainer trainee = getByUsername(username);
+        CommandExecutor commandExecutor = new CommandExecutor(trainee.getTrainings(), value);
+
+        return commandExecutor.executeCommand(criteria.name());
+
 
     }
 
@@ -112,4 +106,47 @@ public class TrainerService {
     public Set<Trainer> getAll() {
         return (Set<Trainer>) trainerRepository.findAll();
     }
+
+    public Set<Trainee> getMyTrainees(Trainer trainer) {
+
+
+        Set<Training> trainings = trainer.getTrainings();
+        Set<Trainee> trainees = new HashSet<>();
+        for (Training training : trainings) {
+            trainees.add(training.getTrainee());
+        }
+        return trainees;
+
+
+    }
+
+    public Set<TrainingResponse> getTraining(TrainingTrainerRequest trainerRequest) {
+
+        Set<Training> trainings = new HashSet<>();
+
+        if (trainerRequest.getPeriodFrom() != null) {
+            trainings.addAll(getTrainingByCriteria(trainerRequest.getUsername(),
+                    TrainerCriteria.fromDate, trainerRequest.getPeriodFrom()));
+        }
+        if (trainerRequest.getPeriodTo() != null) {
+            trainings.addAll(getTrainingByCriteria(trainerRequest.getUsername(),
+                    TrainerCriteria.toDate, trainerRequest.getPeriodTo()));
+        }
+
+
+        if (trainerRequest.getTraineeName() != null) {
+            trainings.addAll(getTrainingByCriteria(trainerRequest.getUsername(),
+                    TrainerCriteria.traineeName, trainerRequest.getTraineeName()));
+        }
+
+        Set<TrainingResponse> trainingResponses = new HashSet<>();
+        for (Training training : trainings) {
+            trainingResponses.add(converter.trainingModelToResponse(training));
+        }
+        return trainingResponses;
+
+    }
+
 }
+
+
