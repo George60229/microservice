@@ -11,19 +11,14 @@ import java.util.Set;
 
 @Service
 public class UserUtils {
-
-
     public String generateUsername(MyUser myEntity, List<? extends MyUser> users) {
         int counter = 0;
-
-
         for (MyUser user : users) {
             if (user.getFirstName().equals((myEntity).getFirstName())
                     && user.getLastName().equals((myEntity).getLastName())) {
                 counter++;
             }
         }
-
         return myEntity.getFirstName() + "_" + (myEntity).getLastName() + (counter == 0 ? "" : counter);
     }
 

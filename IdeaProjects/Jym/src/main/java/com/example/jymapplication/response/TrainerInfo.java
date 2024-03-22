@@ -7,10 +7,6 @@ import lombok.AllArgsConstructor;
 public class TrainerInfo {
     String firstName;
     String lastName;
-
     TrainingType specialization;
-
     boolean isActive;
-
-
 }

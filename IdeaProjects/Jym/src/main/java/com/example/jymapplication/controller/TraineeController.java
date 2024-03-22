@@ -23,37 +23,28 @@ public class TraineeController {
 
     @Autowired
     TraineeService traineeService;
-
     @Autowired
     UserService userService;
-
 
     @PostMapping("/create")
     public TraineeResponse registration(@RequestBody TraineeDto traineeDto) {
         return traineeService.createTrainee(traineeDto);
-
     }
 
     @GetMapping("/get/{id}")
     public TraineeProfile get(@PathVariable int id, @RequestBody UserLoginRequest userLoginRequest) throws AccessDeniedException {
-
         if (userService.checkCredential(userLoginRequest)) {
             return traineeService.get(id);
         }
-
         throw new AccessDeniedException("Wrong Credential");
-
-
     }
 
     @PutMapping("/update")
     public TraineeProfile update(@RequestBody TraineeRequest request) throws AccessDeniedException {
-
         if (userService.checkCredential(request.getUserLoginRequest())) {
             return traineeService.editTrainee(request);
         }
         throw new AccessDeniedException("Wrong Credential");
-
     }
 
     @DeleteMapping("/delete/{id}")
@@ -70,7 +61,6 @@ public class TraineeController {
             return traineeService.getFreeTrainers(username);
         }
         throw new AccessDeniedException("Wrong Credential");
-
     }
 
     @PatchMapping("/activate/{username}/{isActive}")
@@ -79,7 +69,6 @@ public class TraineeController {
         if (userService.checkCredential(userLoginRequest)) {
             traineeService.changeActivity(username, isActive);
         }
-
         return ResponseEntity.ok("Changed");
     }
 
@@ -95,6 +84,4 @@ public class TraineeController {
         }
         throw new AccessDeniedException("Wrong Credential");
     }
-
-
 }

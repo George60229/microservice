@@ -57,6 +57,4 @@ public class TrainingTypeTest {
         List<TrainingType> trainingTypes = myController.get(userLoginRequest);
         Assertions.assertEquals(trainingTypes.get(0).getName(), "run");
     }
-
-
 }

@@ -18,5 +18,4 @@ public class TraineeDto {
     String address;
 
 
-
 }

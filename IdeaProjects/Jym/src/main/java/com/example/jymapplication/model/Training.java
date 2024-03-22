@@ -18,10 +18,7 @@ public class Training implements MyEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Integer id;
-
     private String trainingName;
-
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "training_type_id")
     private TrainingType trainingType;

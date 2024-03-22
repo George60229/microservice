@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class TrainingTypeService {
@@ -14,11 +13,8 @@ public class TrainingTypeService {
     public TrainingTypeService(TrainingTypeRepository trainingTypeRepository) {
         this.trainingTypeRepository = trainingTypeRepository;
     }
-
     TrainingTypeRepository trainingTypeRepository;
-
     public List<TrainingType> getAll() {
-
         return trainingTypeRepository.findAll();
     }
 }

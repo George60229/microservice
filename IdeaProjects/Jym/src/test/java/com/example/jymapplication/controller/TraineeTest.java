@@ -46,7 +46,6 @@ public class TraineeTest {
         TraineeProfile traineeProfile = myController.get(1, userLoginRequest);
         Assertions.assertEquals(traineeProfile.getFirstName(), "George");
     }
-
     @Test
     public void testCreate() {
         TraineeDto trainee = new TraineeDto();
@@ -58,7 +57,5 @@ public class TraineeTest {
         TraineeResponse traineeProfile = myController.registration(trainee);
         Assertions.assertEquals(traineeProfile.getUsername(), "Start");
     }
-
-
 }
 

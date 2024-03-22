@@ -58,6 +58,4 @@ public class TrainerTest {
         TrainerResponse traineeProfile = myController.registration(trainee);
         Assertions.assertEquals(traineeProfile.getFirstName(), "Start");
     }
-
-
 }

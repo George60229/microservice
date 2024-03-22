@@ -11,6 +11,5 @@ public class TrainingResponse {
     Date trainingDate;
     TrainingType trainingType;
     int trainingDuration;
-
     String trainerName;
 }

@@ -30,13 +30,10 @@ public class TraineeService {
     TraineeRepository traineeRepository;
     TrainerService trainerService;
 
-
     @Autowired
     Converter converter;
-
     @Autowired
     UserUtils userUtils;
-
 
     @Autowired
     public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService) {
@@ -44,22 +41,16 @@ public class TraineeService {
         this.trainerService = trainerService;
     }
 
-
-
     public TraineeResponse createTrainee(TraineeDto traineeDto) {
-
         log.info("Create trainee:" + traineeDto.toString());
-
         Trainee trainee = converter.traineeDtoToModel(traineeDto);
         trainee.setPassword(userUtils.generatePassword());
-        trainee.setUsername(userUtils.generateUsername(trainee,traineeRepository.findAll()));
+        trainee.setUsername(userUtils.generateUsername(trainee, traineeRepository.findAll()));
         return converter.traineeModelToResponse(traineeRepository.save(trainee));
     }
 
     @Transactional
     public TraineeProfile editTrainee(TraineeRequest traineeRequest) {
-
-
         Trainee trainee = traineeRepository.findByUsername(traineeRequest.getUsername());
         trainee.setFirstName(traineeRequest.getFirstName());
         trainee.setLastName(traineeRequest.getLastName());
@@ -67,8 +58,6 @@ public class TraineeService {
         trainee.setDateOfBirth(traineeRequest.getDateOfBirth());
         trainee.setIsActive(traineeRequest.getIsActive());
         return converter.getTraineeProfile(traineeRepository.save(trainee), getMyTrainers(trainee));
-
-
     }
 
 
@@ -86,13 +75,10 @@ public class TraineeService {
         trainee.setTrainers(myTrainers);
         traineeRepository.save(trainee);
         return trainerInfos;
-
     }
 
 
     public Set<TrainerInfo> getFreeTrainers(String username) {
-
-
         Trainee trainee = getByUsername(username);
         Set<Training> trainings = trainee.getTrainings();
         Set<Trainer> trainers = trainerService.getAll();
@@ -108,35 +94,25 @@ public class TraineeService {
     }
 
     public Set<Trainer> getMyTrainers(Trainee trainee) {
-
-
         Set<Training> trainings = trainee.getTrainings();
         Set<Trainer> trainers = new HashSet<>();
         for (Training training : trainings) {
             trainers.add(training.getTrainer());
         }
         return trainers;
-
-
     }
 
 
     public void changeActivity(String username, boolean isActive) {
-
         log.info("Change activity status:" + username);
         traineeRepository.updateIsActiveBy(isActive);
-
     }
 
 
     public Set<Training> getTrainingByCriteria(String username, TraineeCriteria criteria, Object value) {
-
-
         Trainee trainee = getByUsername(username);
         CommandExecutor commandExecutor = new CommandExecutor(trainee.getTrainings(), value);
-
         return commandExecutor.executeCommand(criteria.name());
-
     }
 
 
@@ -151,7 +127,6 @@ public class TraineeService {
     public TraineeProfile get(int id) {
         if (traineeRepository.findById(id).isPresent()) {
             Trainee trainee = traineeRepository.findById(id).get();
-
             Set<Trainer> trainers = getMyTrainers(trainee);
             return converter.getTraineeProfile(traineeRepository.findById(id).get(), trainers);
         }
@@ -160,7 +135,6 @@ public class TraineeService {
 
     public Set<TrainingResponse> getTraining(TrainingTraineeRequest trainingTraineeRequest) {
         Set<Training> trainings = new HashSet<>();
-
         if (trainingTraineeRequest.getTrainingType() != null) {
             trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
                     TraineeCriteria.trainingType, trainingTraineeRequest.getTrainingType()));
@@ -173,20 +147,15 @@ public class TraineeService {
             trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
                     TraineeCriteria.toDate, trainingTraineeRequest.getPeriodTo()));
         }
-
         if (trainingTraineeRequest.getTrainerName() != null) {
             trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
                     TraineeCriteria.trainerName, trainingTraineeRequest.getTrainerName()));
         }
-
         Set<TrainingResponse> trainingResponses = new HashSet<>();
         for (Training training : trainings) {
             trainingResponses.add(converter.trainingModelToResponse(training));
         }
         return trainingResponses;
-
     }
-
-
 }
 

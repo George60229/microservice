@@ -16,10 +16,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/trainingType")
 public class TrainingTypeController {
-
     @Autowired
     TrainingTypeService trainingTypeService;
-
     @Autowired
     UserService userService;
 

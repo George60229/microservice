@@ -26,7 +26,6 @@ public abstract class MyUser implements MyEntity {
     public MyUser(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-
     }
 
     private String firstName;

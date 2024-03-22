@@ -15,7 +15,6 @@ import java.util.Set;
 @Service
 public class Converter {
     public Trainee traineeDtoToModel(TraineeDto dto) {
-
         return new Trainee(dto.getFirstName(), dto.getLastName(), dto.getDateOfBirth(), dto.getAddress());
     }
 
@@ -41,7 +40,6 @@ public class Converter {
         for (Trainer trainer : trainers) {
             newTrainers.add(getTrainerInfo(trainer));
         }
-
         return new TraineeProfile(trainee.getFirstName(), trainee.getLastName(), trainee.getDateOfBirth(), trainee.getAddress(), trainee.getIsActive(), newTrainers);
     }
 
@@ -51,7 +49,6 @@ public class Converter {
         for (Trainee trainee : trainees) {
             newTrainees.add(getTraineeInfo(trainee));
         }
-
         return new TrainerProfile(trainer.getFirstName(), trainer.getLastName(), trainer.getUsername(), trainer.getSpecialization(), trainer.getIsActive(), newTrainees);
     }
 

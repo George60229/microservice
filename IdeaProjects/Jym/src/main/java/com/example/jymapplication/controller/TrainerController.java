@@ -28,7 +28,6 @@ public class TrainerController {
     @PostMapping("/create")
     public TrainerResponse registration(@RequestBody TrainerDto trainerDto) {
         return trainerService.createTrainer(trainerDto);
-
     }
 
     @PostMapping("/get/{username}")
@@ -37,7 +36,6 @@ public class TrainerController {
             return trainerService.selectTrainer(username);
         }
         throw new AccessDeniedException("Wrong Credential");
-
     }
 
     @PutMapping("/put")
@@ -59,7 +57,6 @@ public class TrainerController {
     }
 
     @GetMapping("/getTraining")
-
     public Set<TrainingResponse> getTrainings(@RequestBody TrainingTrainerRequest trainingTrainerRequest,
                                               @RequestBody UserLoginRequest userLoginRequest) throws AccessDeniedException {
         if (userService.checkCredential(userLoginRequest)) {
@@ -67,5 +64,4 @@ public class TrainerController {
         }
         throw new AccessDeniedException("Wrong Credential");
     }
-
 }
