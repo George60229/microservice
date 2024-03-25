@@ -1,7 +1,6 @@
 package com.example.jymapplication.controller;
 
 import com.example.jymapplication.dto.TrainerDto;
-import com.example.jymapplication.request.UserLoginRequest;
 import com.example.jymapplication.response.TrainerProfile;
 import com.example.jymapplication.response.TrainerResponse;
 import com.example.jymapplication.service.TrainerService;
@@ -13,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.nio.file.AccessDeniedException;
 
 import static org.mockito.Mockito.when;
 
@@ -30,7 +27,7 @@ public class TrainerTest {
     @Mock
     private UserService userService;
 
-    UserLoginRequest userLoginRequest = new UserLoginRequest("admin", "admin");
+
 
     @Before("")
     public void setUp() {
@@ -38,12 +35,12 @@ public class TrainerTest {
     }
 
     @Test
-    public void testGetById() throws AccessDeniedException {
+    public void testGetById(){
         TrainerProfile trainee = new TrainerProfile();
         trainee.setFirstName("George");
         when(myService.selectTrainer("George")).thenReturn(trainee);
-        when(userService.checkCredential(userLoginRequest)).thenReturn(true);
-        TrainerProfile traineeProfile = myController.get("George", userLoginRequest);
+
+        TrainerProfile traineeProfile = myController.get("George");
         Assertions.assertEquals(traineeProfile.getFirstName(), "George");
     }
 
@@ -54,7 +51,7 @@ public class TrainerTest {
         TrainerResponse traineeResponse = new TrainerResponse();
         traineeResponse.setFirstName("Start");
         when(myService.createTrainer(trainee)).thenReturn(traineeResponse);
-        when(userService.checkCredential(userLoginRequest)).thenReturn(true);
+
         TrainerResponse traineeProfile = myController.registration(trainee);
         Assertions.assertEquals(traineeProfile.getFirstName(), "Start");
     }
