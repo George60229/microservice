@@ -7,9 +7,8 @@ import lombok.NonNull;
 
 @AllArgsConstructor
 @Getter
-public class TrainerRequest {
-    @NonNull
-    UserLoginRequest userLoginRequest;
+public class TrainerUpdateDTO {
+
     @NonNull
     String username;
     @NonNull

@@ -2,7 +2,7 @@ package com.example.jymapplication.service;
 
 import com.example.jymapplication.model.Training;
 import com.example.jymapplication.repository.TrainingRepository;
-import com.example.jymapplication.request.TrainingRequest;
+import com.example.jymapplication.request.TrainingDTO;
 import com.example.jymapplication.utils.Converter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ public class TrainingService {
         this.trainingRepository = trainingRepository;
     }
 
-    public Training createTraining(TrainingRequest trainingRequest) {
-        Training training = converter.trainingRequestToModel(trainingRequest);
-        training.setTrainer(trainerService.getTrainer(trainingRequest.getTrainerUsername()));
-        training.setTrainee(traineeService.getByUsername(trainingRequest.getTraineeUsername()));
+    public Training createTraining(TrainingDTO trainingDTO) {
+        Training training = converter.trainingRequestToModel(trainingDTO);
+        training.setTrainer(trainerService.getTrainer(trainingDTO.getTrainerUsername()));
+        training.setTrainee(traineeService.getByUsername(trainingDTO.getTraineeUsername()));
         log.info("Create training: " + training);
         return trainingRepository.save(training);
     }

@@ -8,9 +8,8 @@ import java.util.Date;
 
 @AllArgsConstructor
 @Getter
-public class TraineeRequest {
-    @NonNull
-    UserLoginRequest userLoginRequest;
+public class TraineeUpdateDTO {
+
     @NonNull
     String firstName;
     @NonNull

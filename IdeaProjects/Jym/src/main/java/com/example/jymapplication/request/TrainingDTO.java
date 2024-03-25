@@ -2,14 +2,13 @@ package com.example.jymapplication.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.util.Date;
+
 @Getter
 @AllArgsConstructor
-public class TrainingRequest {
-    @NonNull
-    UserLoginRequest userLoginRequest;
+public class TrainingDTO {
+
     String traineeUsername;
     String trainerUsername;
     String trainingName;

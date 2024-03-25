@@ -5,7 +5,7 @@ import com.example.jymapplication.dto.TrainerDto;
 import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
-import com.example.jymapplication.request.TrainingRequest;
+import com.example.jymapplication.request.TrainingDTO;
 import com.example.jymapplication.response.*;
 import org.springframework.stereotype.Service;
 
@@ -62,11 +62,11 @@ public class Converter {
                 training.getTrainer().getUsername());
     }
 
-    public Training trainingRequestToModel(TrainingRequest trainingRequest) {
+    public Training trainingRequestToModel(TrainingDTO trainingDTO) {
         Training training = new Training();
-        training.setTrainingName(trainingRequest.getTrainingName());
-        training.setTrainingDate(trainingRequest.getTrainingDate());
-        training.setTrainingDuration(trainingRequest.getTrainingDuration());
+        training.setTrainingName(trainingDTO.getTrainingName());
+        training.setTrainingDate(trainingDTO.getTrainingDate());
+        training.setTrainingDuration(trainingDTO.getTrainingDuration());
         return training;
     }
 }
