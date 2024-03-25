@@ -48,6 +48,7 @@ public class TraineeTest {
         Assertions.assertEquals(traineeProfile.getFirstName(), "George");
     }
 
+    //todo tests
     @Test
     public void testCreate() {
         TraineeDto trainee = new TraineeDto();

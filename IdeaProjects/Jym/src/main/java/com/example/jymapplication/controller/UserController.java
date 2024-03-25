@@ -1,6 +1,7 @@
 package com.example.jymapplication.controller;
 
 import com.example.jymapplication.request.ChangePasswordDTO;
+import com.example.jymapplication.request.TrainingTraineeDTO;
 import com.example.jymapplication.request.UserLoginDTO;
 import com.example.jymapplication.service.TraineeService;
 import com.example.jymapplication.service.TrainerService;
@@ -23,22 +24,26 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+    public ResponseEntity<String> login(@RequestBody UserLoginDTO userLoginDTO) {
+
         if (!userService.checkCredential(userLoginDTO)) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).body("WrongCredential");
         }
         return ResponseEntity.ok("Success!");
     }
 
+    static class ChangePassAndAuthorize {
+        ChangePasswordDTO changePasswordDTO;
+        UserLoginDTO userLoginDTO;
+    }
+
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, @RequestParam String username, @RequestParam String password) {
-        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
-        if (userService.checkCredential(userLoginDTO)) {
+    public ResponseEntity<String> changePassword(@RequestBody ChangePassAndAuthorize changePassAndAuthorize) {
+        if (userService.checkCredential(changePassAndAuthorize.userLoginDTO)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("WrongCredential");
         }
-        userService.changePassword(changePasswordDTO);
+        userService.changePassword(changePassAndAuthorize.changePasswordDTO);
         return ResponseEntity.ok("Success!");
     }
 }
