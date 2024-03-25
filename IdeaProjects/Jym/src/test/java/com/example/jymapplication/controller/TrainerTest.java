@@ -1,46 +1,49 @@
 package com.example.jymapplication.controller;
 
 import com.example.jymapplication.dto.TrainerDto;
+import com.example.jymapplication.request.UserLoginRequest;
 import com.example.jymapplication.response.TrainerProfile;
 import com.example.jymapplication.response.TrainerResponse;
 import com.example.jymapplication.service.TrainerService;
 import com.example.jymapplication.service.UserService;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.nio.file.AccessDeniedException;
 
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(TrainerController.class)
+@SpringBootTest
 public class TrainerTest {
 
     @InjectMocks
     private TrainerController myController;
 
-    @MockBean
+    @Mock
     private TrainerService myService;
 
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @BeforeEach
+    UserLoginRequest userLoginRequest = new UserLoginRequest("admin", "admin");
+
+    @Before("")
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        myController = new TrainerController(myService, userService);
-
     }
 
     @Test
-    public void testGetById() {
+    public void testGetById() throws AccessDeniedException {
         TrainerProfile trainee = new TrainerProfile();
         trainee.setFirstName("George");
-        Mockito.when(this.myService.selectTrainer("George")).thenReturn(trainee);
-        TrainerProfile traineeProfile = myController.get("George");
+        when(myService.selectTrainer("George")).thenReturn(trainee);
+        when(userService.checkCredential(userLoginRequest)).thenReturn(true);
+        TrainerProfile traineeProfile = myController.get("George", userLoginRequest);
         Assertions.assertEquals(traineeProfile.getFirstName(), "George");
     }
 
@@ -51,6 +54,7 @@ public class TrainerTest {
         TrainerResponse traineeResponse = new TrainerResponse();
         traineeResponse.setFirstName("Start");
         when(myService.createTrainer(trainee)).thenReturn(traineeResponse);
+        when(userService.checkCredential(userLoginRequest)).thenReturn(true);
         TrainerResponse traineeProfile = myController.registration(trainee);
         Assertions.assertEquals(traineeProfile.getFirstName(), "Start");
     }
