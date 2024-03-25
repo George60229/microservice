@@ -44,14 +44,14 @@ public class TraineeController {
     public TraineeProfile get(@PathVariable int id) {
         return traineeService.get(id);
     }
-
+//todo inner classes
     @PutMapping("/update")
     public TraineeProfile update(@RequestBody TraineeUpdateDTO request, @RequestParam String username, @RequestParam String password) throws AccessDeniedException {
         UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
         if (userService.checkCredential(userLoginDTO)) {
             return traineeService.editTrainee(request);
         }
-        throw new AccessDeniedException("Wrong Credential");
+        throw new AccessDeniedException("Wrong Credential");//todo fix exceptionHandler
     }
 
     @DeleteMapping("/delete/{id}")
