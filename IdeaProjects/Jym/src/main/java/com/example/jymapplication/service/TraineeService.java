@@ -8,8 +8,8 @@ import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
 import com.example.jymapplication.repository.TraineeRepository;
-import com.example.jymapplication.request.TraineeRequest;
-import com.example.jymapplication.request.TrainingTraineeRequest;
+import com.example.jymapplication.request.TraineeUpdateDTO;
+import com.example.jymapplication.request.TrainingTraineeDTO;
 import com.example.jymapplication.response.TraineeProfile;
 import com.example.jymapplication.response.TraineeResponse;
 import com.example.jymapplication.response.TrainerInfo;
@@ -27,19 +27,16 @@ import java.util.Set;
 @Service
 @Slf4j
 public class TraineeService {
+    @Autowired
     TraineeRepository traineeRepository;
+
+    @Autowired
     TrainerService trainerService;
 
     @Autowired
     Converter converter;
     @Autowired
     UserUtils userUtils;
-
-    @Autowired
-    public TraineeService(TraineeRepository traineeRepository, TrainerService trainerService) {
-        this.traineeRepository = traineeRepository;
-        this.trainerService = trainerService;
-    }
 
     public TraineeResponse createTrainee(TraineeDto traineeDto) {
         log.info("Create trainee:" + traineeDto.toString());
@@ -50,13 +47,13 @@ public class TraineeService {
     }
 
     @Transactional
-    public TraineeProfile editTrainee(TraineeRequest traineeRequest) {
-        Trainee trainee = traineeRepository.findByUsername(traineeRequest.getUsername());
-        trainee.setFirstName(traineeRequest.getFirstName());
-        trainee.setLastName(traineeRequest.getLastName());
-        trainee.setAddress(traineeRequest.getAddress());
-        trainee.setDateOfBirth(traineeRequest.getDateOfBirth());
-        trainee.setIsActive(traineeRequest.getIsActive());
+    public TraineeProfile editTrainee(TraineeUpdateDTO traineeUpdateDTO) {
+        Trainee trainee = traineeRepository.findByUsername(traineeUpdateDTO.getUsername());
+        trainee.setFirstName(traineeUpdateDTO.getFirstName());
+        trainee.setLastName(traineeUpdateDTO.getLastName());
+        trainee.setAddress(traineeUpdateDTO.getAddress());
+        trainee.setDateOfBirth(traineeUpdateDTO.getDateOfBirth());
+        trainee.setIsActive(traineeUpdateDTO.getIsActive());
         return converter.getTraineeProfile(traineeRepository.save(trainee), getMyTrainers(trainee));
     }
 
@@ -90,7 +87,6 @@ public class TraineeService {
             trainerInfos.add(converter.getTrainerInfo(trainer));
         }
         return trainerInfos;
-
     }
 
     public Set<Trainer> getMyTrainers(Trainee trainee) {
@@ -133,23 +129,23 @@ public class TraineeService {
         return null;
     }
 
-    public Set<TrainingResponse> getTraining(TrainingTraineeRequest trainingTraineeRequest) {
+    public Set<TrainingResponse> getTraining(TrainingTraineeDTO trainingTraineeDTO) {
         Set<Training> trainings = new HashSet<>();
-        if (trainingTraineeRequest.getTrainingType() != null) {
-            trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
-                    TraineeCriteria.trainingType, trainingTraineeRequest.getTrainingType()));
+        if (trainingTraineeDTO.getTrainingType() != null) {
+            trainings.addAll(getTrainingByCriteria(trainingTraineeDTO.getUsername(),
+                    TraineeCriteria.trainingType, trainingTraineeDTO.getTrainingType()));
         }
-        if (trainingTraineeRequest.getPeriodFrom() != null) {
-            trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
-                    TraineeCriteria.fromDate, trainingTraineeRequest.getPeriodFrom()));
+        if (trainingTraineeDTO.getPeriodFrom() != null) {
+            trainings.addAll(getTrainingByCriteria(trainingTraineeDTO.getUsername(),
+                    TraineeCriteria.fromDate, trainingTraineeDTO.getPeriodFrom()));
         }
-        if (trainingTraineeRequest.getPeriodTo() != null) {
-            trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
-                    TraineeCriteria.toDate, trainingTraineeRequest.getPeriodTo()));
+        if (trainingTraineeDTO.getPeriodTo() != null) {
+            trainings.addAll(getTrainingByCriteria(trainingTraineeDTO.getUsername(),
+                    TraineeCriteria.toDate, trainingTraineeDTO.getPeriodTo()));
         }
-        if (trainingTraineeRequest.getTrainerName() != null) {
-            trainings.addAll(getTrainingByCriteria(trainingTraineeRequest.getUsername(),
-                    TraineeCriteria.trainerName, trainingTraineeRequest.getTrainerName()));
+        if (trainingTraineeDTO.getTrainerName() != null) {
+            trainings.addAll(getTrainingByCriteria(trainingTraineeDTO.getUsername(),
+                    TraineeCriteria.trainerName, trainingTraineeDTO.getTrainerName()));
         }
         Set<TrainingResponse> trainingResponses = new HashSet<>();
         for (Training training : trainings) {

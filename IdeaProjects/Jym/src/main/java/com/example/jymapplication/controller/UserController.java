@@ -1,7 +1,7 @@
 package com.example.jymapplication.controller;
 
-import com.example.jymapplication.request.ChangePasswordRequest;
-import com.example.jymapplication.request.UserLoginRequest;
+import com.example.jymapplication.request.ChangePasswordDTO;
+import com.example.jymapplication.request.UserLoginDTO;
 import com.example.jymapplication.service.TraineeService;
 import com.example.jymapplication.service.TrainerService;
 import com.example.jymapplication.service.UserService;
@@ -23,8 +23,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserLoginRequest userLoginRequest) {
-        if (!userService.checkCredential(userLoginRequest)) {
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+        if (!userService.checkCredential(userLoginDTO)) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).body("WrongCredential");
         }
         return ResponseEntity.ok("Success!");
@@ -32,11 +33,12 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/changePassword")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        if (userService.checkCredential(changePasswordRequest.getUserLoginRequest())) {
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO, @RequestParam String username, @RequestParam String password) {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+        if (userService.checkCredential(userLoginDTO)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("WrongCredential");
         }
-        userService.changePassword(changePasswordRequest);
+        userService.changePassword(changePasswordDTO);
         return ResponseEntity.ok("Success!");
     }
 }

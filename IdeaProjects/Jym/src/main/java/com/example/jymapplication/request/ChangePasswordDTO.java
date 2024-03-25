@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-@AllArgsConstructor
 @Getter
-public class UserLoginRequest {
+@AllArgsConstructor
+public class ChangePasswordDTO {
     @NonNull
     String username;
     @NonNull
-    String password;
+    String oldPassword;
+    @NonNull
+    String newPassword;
 }

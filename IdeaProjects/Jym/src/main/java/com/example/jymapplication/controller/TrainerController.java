@@ -1,9 +1,9 @@
 package com.example.jymapplication.controller;
 
 import com.example.jymapplication.dto.TrainerDto;
-import com.example.jymapplication.request.TrainerRequest;
-import com.example.jymapplication.request.TrainingTrainerRequest;
-import com.example.jymapplication.request.UserLoginRequest;
+import com.example.jymapplication.request.TrainerUpdateDTO;
+import com.example.jymapplication.request.TrainingTrainerDTO;
+import com.example.jymapplication.request.UserLoginDTO;
 import com.example.jymapplication.response.TrainerProfile;
 import com.example.jymapplication.response.TrainerResponse;
 import com.example.jymapplication.response.TrainingResponse;
@@ -20,9 +20,14 @@ import java.util.Set;
 @Controller
 @RequestMapping("/trainer")
 public class TrainerController {
-    @Autowired
+
+    public TrainerController(TrainerService trainerService, UserService userService) {
+        this.trainerService = trainerService;
+        this.userService = userService;
+    }
+
     TrainerService trainerService;
-    @Autowired
+
     UserService userService;
 
     @PostMapping("/create")
@@ -30,37 +35,37 @@ public class TrainerController {
         return trainerService.createTrainer(trainerDto);
     }
 
-    @PostMapping("/get/{username}")
-    public TrainerProfile get(@PathVariable String username, @RequestBody UserLoginRequest userLoginRequest) throws AccessDeniedException {
-        if (userService.checkCredential(userLoginRequest)) {
-            return trainerService.selectTrainer(username);
-        }
-        throw new AccessDeniedException("Wrong Credential");
+    @PostMapping("/get/{usernameToGet}")
+    public TrainerProfile get(@PathVariable String usernameToGet) {
+        return trainerService.selectTrainer(usernameToGet);
     }
 
     @PutMapping("/put")
-    public TrainerProfile put(@RequestBody TrainerRequest trainerRequest) throws AccessDeniedException {
-        if (userService.checkCredential(trainerRequest.getUserLoginRequest())) {
-            return trainerService.updateTrainer(trainerRequest);
+    public TrainerProfile put(@RequestBody TrainerUpdateDTO trainerUpdateDTO, @RequestParam String username, @RequestParam String password) throws AccessDeniedException {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+        if (userService.checkCredential(userLoginDTO)) {
+            return trainerService.updateTrainer(trainerUpdateDTO);
         }
         throw new AccessDeniedException("Wrong Credential");
     }
 
-    @PatchMapping("/activate/{username}/{isActive}")
-    public ResponseEntity<String> changeActivity(@PathVariable String username, @PathVariable boolean isActive
-            , @RequestBody UserLoginRequest userLoginRequest) throws AccessDeniedException {
-        if (userService.checkCredential(userLoginRequest)) {
-            trainerService.changeActivity(username, isActive);
+    @PatchMapping("/activate/{usernameToGet}/{isActive}")
+    public ResponseEntity<String> changeActivity(@PathVariable String usernameToGet, @PathVariable boolean isActive
+            , @RequestParam String username, @RequestParam String password) throws AccessDeniedException {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+        if (userService.checkCredential(userLoginDTO)) {
+            trainerService.changeActivity(usernameToGet, isActive);
             return ResponseEntity.ok("Changed");
         }
         throw new AccessDeniedException("Wrong Credential");
     }
 
     @GetMapping("/getTraining")
-    public Set<TrainingResponse> getTrainings(@RequestBody TrainingTrainerRequest trainingTrainerRequest,
-                                              @RequestBody UserLoginRequest userLoginRequest) throws AccessDeniedException {
-        if (userService.checkCredential(userLoginRequest)) {
-            return trainerService.getTraining(trainingTrainerRequest);
+    public Set<TrainingResponse> getTrainings(@RequestBody TrainingTrainerDTO trainingTrainerDTO
+            , @RequestParam String username, @RequestParam String password) throws AccessDeniedException {
+        UserLoginDTO userLoginDTO = new UserLoginDTO(username, password);
+        if (userService.checkCredential(userLoginDTO)) {
+            return trainerService.getTraining(trainingTrainerDTO);
         }
         throw new AccessDeniedException("Wrong Credential");
     }

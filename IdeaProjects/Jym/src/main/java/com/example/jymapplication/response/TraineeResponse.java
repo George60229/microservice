@@ -10,9 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class TraineeResponse {
-
-
     String username;
     String password;
-
 }

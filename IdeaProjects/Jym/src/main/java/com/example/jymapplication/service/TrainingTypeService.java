@@ -13,7 +13,9 @@ public class TrainingTypeService {
     public TrainingTypeService(TrainingTypeRepository trainingTypeRepository) {
         this.trainingTypeRepository = trainingTypeRepository;
     }
+
     TrainingTypeRepository trainingTypeRepository;
+
     public List<TrainingType> getAll() {
         return trainingTypeRepository.findAll();
     }
