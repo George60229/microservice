@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Entity
 public class TrainingType {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
