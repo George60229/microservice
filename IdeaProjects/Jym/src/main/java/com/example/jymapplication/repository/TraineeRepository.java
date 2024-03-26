@@ -12,11 +12,12 @@ import java.util.Optional;
 @Repository
 public interface TraineeRepository extends JpaRepository<Trainee, Integer> {
 
-
     @Modifying
     @Query("update Trainee t set t.isActive = ?1")
     int updateIsActiveBy(Boolean isActive);
+
     Trainee findByUsername(String username);
+
     void deleteByUsername(String username);
 
 }

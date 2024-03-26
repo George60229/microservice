@@ -12,9 +12,7 @@ public class TrainingType {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false)
     private Integer id;
-
     private String name;
-
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "training_id")
     private Training training;

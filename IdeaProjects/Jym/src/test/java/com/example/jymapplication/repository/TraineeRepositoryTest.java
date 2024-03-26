@@ -1,7 +1,8 @@
-package com.example.jymapplication;
+package com.example.jymapplication.repository;
 
 
 import com.example.jymapplication.model.Trainee;
+import com.example.jymapplication.repository.TestConfig;
 import com.example.jymapplication.repository.TraineeRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

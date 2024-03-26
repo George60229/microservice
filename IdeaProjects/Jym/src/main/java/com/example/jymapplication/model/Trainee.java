@@ -1,8 +1,6 @@
 package com.example.jymapplication.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +23,9 @@ public class Trainee extends MyUser {
         this.address = address;
     }
 
-    @ManyToMany(mappedBy = "trainees",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL)
     private Set<Training> trainings;
+
+    @ManyToMany
+    private Set<Trainer> trainers;
 }

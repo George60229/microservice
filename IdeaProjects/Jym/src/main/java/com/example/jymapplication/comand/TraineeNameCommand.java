@@ -1,6 +1,5 @@
 package com.example.jymapplication.comand;
 
-import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
 
 import java.util.HashSet;

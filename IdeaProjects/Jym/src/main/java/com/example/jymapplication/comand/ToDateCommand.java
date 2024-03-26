@@ -18,7 +18,6 @@ public class ToDateCommand implements Command {
         this.toDate = toDate;
     }
 
-
     @Override
     public Set<Training> execute() {
         Set<Training> resultTrainings = new HashSet<>();
