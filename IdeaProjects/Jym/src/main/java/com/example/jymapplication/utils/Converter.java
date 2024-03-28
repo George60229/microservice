@@ -14,6 +14,8 @@ import java.util.Set;
 
 @Service
 public class Converter {
+
+
     public Trainee traineeDtoToModel(TraineeDto dto) {
         return new Trainee(dto.getFirstName(), dto.getLastName(), dto.getDateOfBirth(), dto.getAddress());
     }

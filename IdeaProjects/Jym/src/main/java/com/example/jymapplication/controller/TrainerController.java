@@ -43,7 +43,6 @@ public class TrainerController {
     }
 
     static class TrainerAuthorize {
-
         TrainerUpdateDTO trainingTraineeDTO;
         UserLoginDTO userLoginDTO;
     }
@@ -53,16 +52,15 @@ public class TrainerController {
         if (userService.checkCredential(trainerAuthorize.userLoginDTO)) {
             return trainerService.updateTrainer(trainerAuthorize.trainingTraineeDTO);
         }
-        throw new AccessDeniedException("Wrong Credential");
+        return null;
     }
-
 
     @PatchMapping("/activate/{usernameToGet}/{isActive}")
     public ResponseEntity<String> changeActivity(@PathVariable String usernameToGet,
                                                  @PathVariable boolean isActive,
                                                  @RequestBody UserLoginDTO userLoginDTO) {
         if (userService.checkCredential(userLoginDTO)) {
-            trainerService.changeActivity(usernameToGet, isActive);
+            userService.changeActivity(usernameToGet, isActive);
             return ResponseEntity.ok("Changed");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access is denied");
@@ -79,6 +77,7 @@ public class TrainerController {
         if (userService.checkCredential(trainingAuthorize.userLoginDTO)) {
             return trainerService.getTraining(trainingAuthorize.trainingTrainerDTO);
         }
-        throw new AccessDeniedException("Wrong Credential");
+        return null;
+
     }
 }

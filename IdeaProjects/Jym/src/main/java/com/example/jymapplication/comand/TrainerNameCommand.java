@@ -8,7 +8,6 @@ import java.util.Set;
 public class TrainerNameCommand implements Command {
     private final Set<Training> trainings;
     private final String trainerName;
-
     public TrainerNameCommand(Set<Training> trainings, String trainerName) {
         this.trainings = trainings;
         this.trainerName = trainerName;

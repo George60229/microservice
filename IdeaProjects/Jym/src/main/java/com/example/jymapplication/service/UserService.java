@@ -34,4 +34,15 @@ public class UserService {
             myUserRepository.save(myUser);
         }
     }
+
+    public MyUser getByUsername(String username) {
+        return myUserRepository.findByUsername(username);
+    }
+
+    public void changeActivity(String username, Boolean activity) {
+        MyUser myUser = myUserRepository.findByUsername(username);
+        myUser.setIsActive(activity);
+        myUserRepository.save(myUser);
+
+    }
 }

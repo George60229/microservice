@@ -18,7 +18,6 @@ public class CommandExecutor {
         commands.put("TrainingType", new TrainingTypeCommand(trainings, (TrainingType) value));
         commands.put("TraineeType", new TraineeNameCommand(trainings, (String) value));
     }
-
     public Set<Training> executeCommand(String criteria) {
         if (commands.containsKey(criteria)) {
             Command command = commands.get(criteria);

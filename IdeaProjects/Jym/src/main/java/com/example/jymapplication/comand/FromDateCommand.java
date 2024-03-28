@@ -9,12 +9,10 @@ import java.util.Set;
 public class FromDateCommand implements Command {
     private Set<Training> trainings;
     private final Date fromDate;
-
     public FromDateCommand(Set<Training> trainings, Date fromDate) {
         this.trainings = trainings;
         this.fromDate = fromDate;
     }
-
     @Override
     public Set<Training> execute() {
         Set<Training> resultTrainings = new HashSet<>();

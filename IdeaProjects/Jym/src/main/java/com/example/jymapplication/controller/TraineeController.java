@@ -21,12 +21,8 @@ import java.util.Set;
 @RequestMapping("/trainee")
 
 public class TraineeController {
-
-
     TraineeService traineeService;
-
     UserService userService;
-
 
     public TraineeController(TraineeService traineeService, UserService userService) {
         this.traineeService = traineeService;
@@ -42,11 +38,9 @@ public class TraineeController {
     public TraineeProfile get(@PathVariable int id) {
         return traineeService.get(id);
     }
-
     static class UpdateAuthorize {
         TraineeUpdateDTO traineeUpdateDTO;
         UserLoginDTO userLoginDTO;
-
     }
 
     @PutMapping("/update")
@@ -57,7 +51,6 @@ public class TraineeController {
         return null;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id, @RequestBody UserLoginDTO userLoginDTO) {
         if (userService.checkCredential(userLoginDTO)) {
@@ -67,57 +60,46 @@ public class TraineeController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access is denied");
     }
 
-
     @GetMapping("/getFreeTrainers/{usernameToGet}")
     public Set<TrainerInfo> getTrainers(@PathVariable String usernameToGet, @RequestBody UserLoginDTO userLoginDTO) throws AccessDeniedException {
         if (userService.checkCredential(userLoginDTO)) {
             return traineeService.getFreeTrainers(usernameToGet);
         }
-        throw new AccessDeniedException("Wrong Credential");
+        return null;
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
     @PatchMapping("/activate/{usernameToChange}/{isActive}")
     public ResponseEntity<String> changeActivity(@PathVariable String usernameToChange, @PathVariable boolean isActive,
                                                  @RequestBody UserLoginDTO userLoginDTO) {
         if (userService.checkCredential(userLoginDTO)) {
-            traineeService.changeActivity(usernameToChange, isActive);
+            userService.changeActivity(usernameToChange, isActive);
             return ResponseEntity.ok("Changed");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access is denied");
-
     }
-
     static class TrainersListAuthorize {
         Set<String> trainersUsername;
         UserLoginDTO userLoginDTO;
-
     }
-
-
     @PutMapping("/updateTrainers/{usernameToGet}")
-    public Set<TrainerInfo> trainersList(@PathVariable String usernameToGet, @RequestBody TrainersListAuthorize trainersListAuthorize) throws AccessDeniedException {
-
+    public Set<TrainerInfo> trainersList(@PathVariable String usernameToGet, @RequestBody TrainersListAuthorize trainersListAuthorize) {
         if (userService.checkCredential(trainersListAuthorize.userLoginDTO)) {
             return traineeService.updateTrainers(usernameToGet, trainersListAuthorize.trainersUsername);
         }
-        throw new AccessDeniedException("Wrong Credential");
-
+        return null;
     }
 
     static class TrainingTraineeAuthorize {
-
         TrainingTraineeDTO trainingTraineeDTO;
         UserLoginDTO userLoginDTO;
     }
 
 
     @GetMapping("/getTraining")
-    public Set<TrainingResponse> getTraining(TrainingTraineeAuthorize trainingTraineeAuthorize) throws AccessDeniedException {
-
+    public Set<TrainingResponse> getTraining(TrainingTraineeAuthorize trainingTraineeAuthorize) {
         if (userService.checkCredential(trainingTraineeAuthorize.userLoginDTO)) {
             return traineeService.getTraining(trainingTraineeAuthorize.trainingTraineeDTO);
         }
-        throw new AccessDeniedException("Wrong Credential");
+        return null;
     }
 }

@@ -15,6 +15,7 @@ import com.example.jymapplication.response.TraineeResponse;
 import com.example.jymapplication.response.TrainerInfo;
 import com.example.jymapplication.response.TrainingResponse;
 import com.example.jymapplication.utils.Converter;
+import com.example.jymapplication.utils.PasswordHashing;
 import com.example.jymapplication.utils.UserUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +30,8 @@ import java.util.Set;
 public class TraineeService {
     @Autowired
     TraineeRepository traineeRepository;
-
     @Autowired
     TrainerService trainerService;
-
     @Autowired
     Converter converter;
     @Autowired
@@ -43,7 +42,10 @@ public class TraineeService {
         Trainee trainee = converter.traineeDtoToModel(traineeDto);
         trainee.setPassword(userUtils.generatePassword());
         trainee.setUsername(userUtils.generateUsername(trainee, traineeRepository.findAll()));
-        return converter.traineeModelToResponse(traineeRepository.save(trainee));
+        TraineeResponse traineeResponse = converter.traineeModelToResponse(trainee);
+        trainee.setPassword(PasswordHashing.hashPassword(trainee.getPassword()));
+        traineeRepository.save(trainee);
+        return traineeResponse;
     }
 
     @Transactional
@@ -56,7 +58,6 @@ public class TraineeService {
         trainee.setIsActive(traineeUpdateDTO.getIsActive());
         return converter.getTraineeProfile(traineeRepository.save(trainee), getMyTrainers(trainee));
     }
-
 
     public Set<TrainerInfo> updateTrainers(String username, Set<String> trainers) {
         Trainee trainee = traineeRepository.findByUsername(username);
@@ -73,7 +74,6 @@ public class TraineeService {
         traineeRepository.save(trainee);
         return trainerInfos;
     }
-
 
     public Set<TrainerInfo> getFreeTrainers(String username) {
         Trainee trainee = getByUsername(username);
@@ -98,19 +98,11 @@ public class TraineeService {
         return trainers;
     }
 
-
-    public void changeActivity(String username, boolean isActive) {
-        log.info("Change activity status:" + username);
-        traineeRepository.updateIsActiveBy(isActive);
-    }
-
-
     public Set<Training> getTrainingByCriteria(String username, TraineeCriteria criteria, Object value) {
         Trainee trainee = getByUsername(username);
         CommandExecutor commandExecutor = new CommandExecutor(trainee.getTrainings(), value);
         return commandExecutor.executeCommand(criteria.name());
     }
-
 
     public void delete(int id) {
         traineeRepository.deleteById(id);

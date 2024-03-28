@@ -1,10 +1,8 @@
 package com.example.jymapplication.service;
 
 import com.example.jymapplication.comand.CommandExecutor;
-import com.example.jymapplication.dto.AuthorizeDto;
 import com.example.jymapplication.dto.TrainerDto;
 import com.example.jymapplication.enums.TrainerCriteria;
-import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.model.Trainee;
 import com.example.jymapplication.model.Trainer;
 import com.example.jymapplication.model.Training;
@@ -62,12 +60,6 @@ public class TrainerService {
         return trainerRepository.findByUsername(username);
     }
 
-    public void changeActivity(String username, boolean isActive) {
-        log.info("Change activity status:" + username);
-        Trainer trainer = trainerRepository.findByUsername(username);
-        trainer.setIsActive(isActive);
-        trainerRepository.save(trainer);
-    }
 
     public Set<Training> getTrainingByCriteria(String username, TrainerCriteria criteria, Object value) {
         log.info("Change activity status:" + username);
@@ -85,6 +77,9 @@ public class TrainerService {
     }
 
     public Set<Trainee> getMyTrainees(Trainer trainer) {
+        if (trainer == null) {
+            return null;
+        }
         Set<Training> trainings = trainer.getTrainings();
         Set<Trainee> trainees = new HashSet<>();
         for (Training training : trainings) {

@@ -18,6 +18,5 @@ public class MemoryHealthIndicator implements HealthIndicator {
         } else {
             return Health.down().withDetail("Error", "Low memory available").build();
         }
-
     }
 }
