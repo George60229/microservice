@@ -1,14 +1,17 @@
 package com.example.jymapplication.security;
 
-import com.example.jymapplication.model.MyUser;
 import com.example.jymapplication.response.UserResponse;
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -26,6 +29,7 @@ public class JwtUtil {
     public JwtUtil() {
         this.jwtParser = Jwts.parser().setSigningKey(secret_key);
     }
+
     public String createToken(UserResponse user) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("username", user.getUsername());
@@ -45,10 +49,7 @@ public class JwtUtil {
     public Claims resolveClaims(HttpServletRequest req) {
         try {
             String token = resolveToken(req);
-            if (token != null) {
-                return parseJwtClaims(token);
-            }
-            return null;
+            return (token != null) ? parseJwtClaims(token) : null;
         } catch (ExpiredJwtException ex) {
             req.setAttribute("expired", ex.getMessage());
             throw ex;
@@ -59,12 +60,8 @@ public class JwtUtil {
     }
 
     public String resolveToken(HttpServletRequest request) {
-
         String bearerToken = request.getHeader(TOKEN_HEADER);
-        if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(TOKEN_PREFIX.length());
-        }
-        return null;
+        return (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) ? bearerToken.substring(TOKEN_PREFIX.length()) : null;
     }
 
     public boolean validateClaims(Claims claims) throws AuthenticationException {

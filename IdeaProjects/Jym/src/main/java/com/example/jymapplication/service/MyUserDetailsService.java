@@ -15,22 +15,21 @@ import java.util.Map;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+    private final Map<String, Integer> loginAttempts = new HashMap<>();
+    UserService userService;
+    public PasswordEncoder passwordEncoder;
+
     @Autowired
     public MyUserDetailsService(UserService userService) {
         this.userService = userService;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    UserService userService;
-    public PasswordEncoder passwordEncoder;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MyUser user = userService.getByUsername(username);
         return new MyUserDetails(user.getPassword(), user.getUsername());
     }
-
-    private final Map<String, Integer> loginAttempts = new HashMap<>();
 
     public void handleLoginAttempt(String username, String password) {
         if (loginAttempts.containsKey(username) && loginAttempts.get(username) >= 3) {
