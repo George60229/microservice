@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Getter
@@ -22,7 +23,7 @@ public class Training implements MyEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "training_type_id")
     private TrainingType trainingType;
-    private Date trainingDate;
+    private LocalDate trainingDate;
     private int trainingDuration;
 
     @ManyToOne(cascade = CascadeType.ALL)

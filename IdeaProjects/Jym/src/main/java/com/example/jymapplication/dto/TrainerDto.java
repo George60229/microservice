@@ -16,6 +16,5 @@ public class TrainerDto {
     String firstName;
     @NonNull
     String lastName;
-    @NonNull
     private TrainingType specialization;
 }

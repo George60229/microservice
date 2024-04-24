@@ -38,6 +38,7 @@ public class TraineeController {
     public TraineeProfile get(@PathVariable int id) {
         return traineeService.get(id);
     }
+
     static class UpdateAuthorize {
         TraineeUpdateDTO traineeUpdateDTO;
         UserLoginDTO userLoginDTO;
@@ -77,10 +78,12 @@ public class TraineeController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access is denied");
     }
+
     static class TrainersListAuthorize {
         Set<String> trainersUsername;
         UserLoginDTO userLoginDTO;
     }
+
     @PutMapping("/updateTrainers/{usernameToGet}")
     public Set<TrainerInfo> trainersList(@PathVariable String usernameToGet, @RequestBody TrainersListAuthorize trainersListAuthorize) {
         if (userService.checkCredential(trainersListAuthorize.userLoginDTO)) {

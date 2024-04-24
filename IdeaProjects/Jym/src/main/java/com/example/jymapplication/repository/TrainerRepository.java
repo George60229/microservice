@@ -6,8 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Integer> {
-
-
     Trainer findByUsername(String username);
+
+
+
 
 }

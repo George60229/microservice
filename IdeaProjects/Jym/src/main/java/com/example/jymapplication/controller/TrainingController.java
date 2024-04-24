@@ -1,11 +1,11 @@
 package com.example.jymapplication.controller;
 
+import com.example.jymapplication.dto.TrainerRequest;
+import com.example.jymapplication.openfeign.AnotherMicroserviceClient;
 import com.example.jymapplication.request.TrainingDTO;
-import com.example.jymapplication.request.UserLoginDTO;
 import com.example.jymapplication.service.TrainingService;
 import com.example.jymapplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,20 +22,14 @@ public class TrainingController {
     UserService userService;
     @Autowired
     TrainingService trainingService;
-
-    static class TrainingAuthorize {
-        TrainingDTO trainingTrainerDTO;
-        UserLoginDTO userLoginDTO;
-    }
+    @Autowired
+    private AnotherMicroserviceClient anotherMicroserviceClient;
 
     @ExceptionHandler(AccessDeniedException.class)
     @PostMapping("/create")
-    public ResponseEntity<String> addTraining(@RequestBody TrainingAuthorize trainingAuthorize) throws AccessDeniedException {
-
-        if (userService.checkCredential(trainingAuthorize.userLoginDTO)) {
-            trainingService.createTraining(trainingAuthorize.trainingTrainerDTO);
-            return ResponseEntity.ok("Created!");
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access is denied");
+    public ResponseEntity<String> addTraining(@RequestBody TrainingDTO trainingAuthorize) {
+        TrainerRequest trainerRequest = trainingService.getTrainerRequest(trainingAuthorize);
+        anotherMicroserviceClient.saveInfo(trainerRequest);
+        return ResponseEntity.ok(trainingService.createTraining(trainingAuthorize).toString());
     }
 }

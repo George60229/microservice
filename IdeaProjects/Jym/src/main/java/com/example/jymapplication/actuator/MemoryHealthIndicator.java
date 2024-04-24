@@ -12,7 +12,6 @@ public class MemoryHealthIndicator implements HealthIndicator {
         long freeMemory = Runtime.getRuntime().freeMemory();
         long totalMemory = Runtime.getRuntime().totalMemory();
         double freeMemoryPercentage = ((double) freeMemory / totalMemory) * 100;
-
         if (freeMemoryPercentage > 10) {
             return Health.up().withDetail("OK","A lot of memory enable").build();
         } else {

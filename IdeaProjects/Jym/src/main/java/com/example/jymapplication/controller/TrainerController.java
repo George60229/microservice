@@ -29,7 +29,6 @@ public class TrainerController {
     }
 
     TrainerService trainerService;
-
     UserService userService;
 
     @PostMapping("/create")
@@ -48,7 +47,7 @@ public class TrainerController {
     }
 
     @PutMapping("/put")
-    public TrainerProfile put(@RequestBody TrainerAuthorize trainerAuthorize) throws AccessDeniedException {
+    public TrainerProfile put(@RequestBody TrainerAuthorize trainerAuthorize) {
         if (userService.checkCredential(trainerAuthorize.userLoginDTO)) {
             return trainerService.updateTrainer(trainerAuthorize.trainingTraineeDTO);
         }
@@ -73,11 +72,9 @@ public class TrainerController {
 
     @GetMapping("/getTraining")
     public Set<TrainingResponse> getTrainings(@RequestBody TrainingAuthorize trainingAuthorize) throws AccessDeniedException {
-
         if (userService.checkCredential(trainingAuthorize.userLoginDTO)) {
             return trainerService.getTraining(trainingAuthorize.trainingTrainerDTO);
         }
         return null;
-
     }
 }
